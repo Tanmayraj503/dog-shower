@@ -9,41 +9,49 @@ export default function RandomDogShower() {
   const fetchDog = async () => {
     try {
       setError(null);
-      const response = await fetch('https://dog.ceo/api/breeds/image/random', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-        },
-      });
+      
+      // Try direct API call first
+      let response = await fetch('https://dog.ceo/api/breeds/image/random');
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
       const data = await response.json();
+      console.log('API Response:', data);
       
       if (data.status === 'success' && data.message) {
         const newDog = { 
           url: data.message, 
           id: Date.now() + Math.random() 
         };
+        console.log('Adding dog:', newDog);
         setDogs(prev => [newDog, ...prev].slice(0, 12));
         return true;
       } else {
         throw new Error('Invalid response from API');
       }
     } catch (error) {
-      console.error('Error fetching dog:', error);
-      setError(`Failed to fetch: ${error.message}`);
+      console.error('Full error details:', error);
+      setError(`Network error: ${error.message}. The artifact environment may block external API calls.`);
       return false;
     }
   };
 
   const handleGetDog = async () => {
     setLoading(true);
-    await fetchDog();
+    const success = await fetchDog();
     setLoading(false);
+    
+    if (!success) {
+      console.log('Failed to fetch dog. Check console for details.');
+    }
   };
+
+  useEffect(() => {
+    // Component mounted
+    console.log('Component mounted, ready to fetch dogs');
+  }, []);
 
   useEffect(() => {
     let interval;
@@ -86,7 +94,8 @@ export default function RandomDogShower() {
           
           <button
             onClick={toggleAutoPlay}
-            className={`${autoPlay ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all transform hover:scale-105`}
+            disabled={error !== null}
+            className={`${autoPlay ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} disabled:bg-gray-400 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all transform hover:scale-105 disabled:hover:scale-100`}
           >
             {autoPlay ? '⏸️ Stop Shower' : '▶️ Start Shower'}
           </button>
@@ -102,46 +111,50 @@ export default function RandomDogShower() {
         </div>
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-center">
-            <p className="font-semibold">Error:</p>
-            <p className="text-sm">{error}</p>
-            <p className="text-xs mt-2">Check browser console for more details</p>
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+            <p className="font-bold">⚠️ Unable to Fetch Dogs</p>
+            <p className="text-sm mt-2">{error}</p>
+            <p className="text-xs mt-3 text-red-600">
+              <strong>Note:</strong> Claude artifacts have network restrictions that may prevent external API calls. 
+              This code will work perfectly when copied to your own environment (local HTML file, CodePen, etc).
+            </p>
+            <p className="text-xs mt-2">Open browser console (F12) for detailed error logs.</p>
           </div>
         )}
 
-        {dogs.length === 0 ? (
+        {dogs.length === 0 && !error ? (
           <div className="text-center py-16">
-            <div className="text-8xl mb-4">🐶</div>
+            <div className="text-8xl mb-4 animate-bounce">🐶</div>
             <p className="text-gray-500 text-xl mb-2">No dogs yet! Click the button to start the shower 🚿</p>
-            <p className="text-gray-400 text-sm">Using Dog CEO API: https://dog.ceo/api/breeds/image/random</p>
+            <p className="text-gray-400 text-sm mt-4">API: https://dog.ceo/api/breeds/image/random</p>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {dogs.map((dog) => (
-              <div
-                key={dog.id}
-                className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all hover:scale-105 hover:shadow-2xl animate-fade-in"
-              >
-                <img
-                  src={dog.url}
-                  alt="Random dog"
-                  className="w-full h-64 object-cover"
-                  loading="lazy"
-                  crossOrigin="anonymous"
-                  onError={(e) => {
-                    console.error('Image failed to load:', dog.url);
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-
-        {dogs.length > 0 && (
-          <div className="text-center mt-8 text-sm text-gray-500">
-            🐕 Showing {dogs.length} {dogs.length === 1 ? 'dog' : 'dogs'}
-          </div>
-        )}
+        ) : dogs.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {dogs.map((dog) => (
+                <div
+                  key={dog.id}
+                  className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all hover:scale-105 hover:shadow-2xl animate-fade-in"
+                >
+                  <img
+                    src={dog.url}
+                    alt="Random dog"
+                    className="w-full h-64 object-cover"
+                    loading="lazy"
+                    onLoad={() => console.log('Image loaded:', dog.url)}
+                    onError={(e) => {
+                      console.error('Image failed to load:', dog.url);
+                      e.target.parentElement.innerHTML = '<div class="w-full h-64 flex items-center justify-center bg-gray-200 text-6xl">🐕</div>';
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="text-center mt-8 text-sm text-gray-500">
+              🐕 Showing {dogs.length} {dogs.length === 1 ? 'dog' : 'dogs'}
+            </div>
+          </>
+        ) : null}
       </div>
 
       <style>{`
@@ -157,6 +170,17 @@ export default function RandomDogShower() {
         }
         .animate-fade-in {
           animation: fade-in 0.5s ease-out;
+        }
+        @keyframes bounce {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+        .animate-bounce {
+          animation: bounce 2s ease-in-out infinite;
         }
       `}</style>
     </div>
