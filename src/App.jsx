@@ -6,54 +6,57 @@ export default function RandomDogShower() {
   const [autoPlay, setAutoPlay] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchDog = async () => {
-    try {
-      setError(null);
-      
-      // Try direct API call first
-      let response = await fetch('https://dog.ceo/api/breeds/image/random');
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      console.log('API Response:', data);
-      
-      if (data.status === 'success' && data.message) {
-        const newDog = { 
-          url: data.message, 
-          id: Date.now() + Math.random() 
-        };
-        console.log('Adding dog:', newDog);
-        setDogs(prev => [newDog, ...prev].slice(0, 12));
-        return true;
-      } else {
-        throw new Error('Invalid response from API');
-      }
-    } catch (error) {
-      console.error('Full error details:', error);
-      setError(`Network error: ${error.message}. The artifact environment may block external API calls.`);
-      return false;
-    }
-  };
+  const fetchDog = () => {
+    setError(null);
+    return fetch('https://dog.ceo/api/breeds/image/random')
+      .then(response => {
+        if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`) }
+        return response.json();
+      })
+      .then(data => {
+        console.log("API Response:", data);
+        if (data.status === 'success' && data.message) {
+          let newDog = {
+            url: data.message,
+            id: Date.now() + Math.random()
+          }
+          console.log('Adding Dog', newDog);
+          setDogs(prev => [newDog, ...prev].slice(0, 12));
+        } else {
+          throw new Error('Invalid response from API');
+        }
 
-  const handleGetDog = async () => {
+      })
+      .catch(error => {
+        console.error('Full error details', error);
+        setError(`Network error: ${error.message}. The artifact environment may block external API calls.`);
+      });
+  };
+  const handleGetDog = () => {
     setLoading(true);
-    const success = await fetchDog();
-    setLoading(false);
-    
-    if (!success) {
-      console.log('Failed to fetch dog. Check console for details.');
-    }
+    fetchDog()
+      .then(success => {
+        setLoading(false);
+        if (!success) {
+          console.log('Failed to fetch dog. Check console for details.');
+        }
+      });
   };
 
-  useEffect(() => {
-    // Component mounted
-    console.log('Component mounted, ready to fetch dogs');
-  }, []);
+  const clearDogs = () =>{
+    setDogs([]);
+    setError(null);
+  }
 
-  useEffect(() => {
+  const toggleAutoPlay = () => {
+    if (!autoPlay && dogs.length === 0){
+      fetchDog();
+    } else {
+      setAutoPlay (!autoPlay);
+    }
+  }
+
+  useEffect(()=> {
     let interval;
     if (autoPlay) {
       interval = setInterval(() => {
@@ -63,20 +66,9 @@ export default function RandomDogShower() {
     return () => clearInterval(interval);
   }, [autoPlay]);
 
-  const clearDogs = () => {
-    setDogs([]);
-    setError(null);
-  };
-
-  const toggleAutoPlay = () => {
-    if (!autoPlay && dogs.length === 0) {
-      fetchDog();
-    }
-    setAutoPlay(!autoPlay);
-  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 p-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-5xl font-bold text-indigo-900 mb-2">🐕 Random Dog Shower</h1>
@@ -91,7 +83,7 @@ export default function RandomDogShower() {
           >
             {loading ? '⏳ Loading...' : '🎲 Get Random Dog'}
           </button>
-          
+
           <button
             onClick={toggleAutoPlay}
             disabled={error !== null}
@@ -115,7 +107,7 @@ export default function RandomDogShower() {
             <p className="font-bold">⚠️ Unable to Fetch Dogs</p>
             <p className="text-sm mt-2">{error}</p>
             <p className="text-xs mt-3 text-red-600">
-              <strong>Note:</strong> Claude artifacts have network restrictions that may prevent external API calls. 
+              <strong>Note:</strong> Claude artifacts have network restrictions that may prevent external API calls.
               This code will work perfectly when copied to your own environment (local HTML file, CodePen, etc).
             </p>
             <p className="text-xs mt-2">Open browser console (F12) for detailed error logs.</p>
