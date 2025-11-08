@@ -14,7 +14,7 @@ export default function Footer(){
 
         {/* Middle social icons */}
         <div className="flex space-x-4">
-          <a href="https://instagram.com/tanmay.raj53" 
+          <a href="https://instagram.com/tanmay" 
           target="_blank"
            rel="noopener noreferrer"
           className="hover:text-purple-600 transition"> 
