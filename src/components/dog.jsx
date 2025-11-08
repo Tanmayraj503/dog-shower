@@ -68,10 +68,10 @@ export default function Dog() {
 
 
   return (
-    <div className="h-full pt-17 bg-linear-to-br from-blue-50 to-indigo-100">
-      <div className="max-w-6xl mx-auto">
+    <div className="h-full pt-24 sm:pt-17 bg-linear-to-br from-blue-50 to-indigo-100">
+      <div className="max-w-6xl lg:mx-auto mx-4">
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-indigo-900 mb-2">🐕 Random Dog Shower</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-indigo-900 mb-2">🐕 Random Dog Shower</h1>
           <p className="text-gray-600">Click to shower yourself with adorable dogs!</p>
         </div>
 

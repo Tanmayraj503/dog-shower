@@ -68,10 +68,10 @@ export default function Cat() {
   }, [autoPlay]);
 
   return (
-    <div className="bg-gradient-to-br from-pink-50 to-purple-100 pt-17">
-      <div className="max-w-6xl mx-auto">
+    <div className="bg-gradient-to-br from-pink-50 to-purple-100 pt-24 sm:pt-17">
+      <div className="max-w-6xl lg:mx-auto mx-4">
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-purple-900 mb-2">😺 Random Cat Shower</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-purple-900 mb-2">😺 Random Cat Shower</h1>
           <p className="text-gray-600">Click or auto-shower yourself with adorable cats!</p>
         </div>
 
