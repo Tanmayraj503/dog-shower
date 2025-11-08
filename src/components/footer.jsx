@@ -20,7 +20,7 @@ export default function Footer(){
           className="hover:text-purple-600 transition"> 
           <FontAwesomeIcon icon={faInstagram} />
           </a>
-          <a href="https://github.com/Tanmayraj503" 
+          <a href="https://github.com/Tanmay" 
           target="_blank"
            rel="noopener noreferrer"
           className="hover:text-purple-600 transition">
