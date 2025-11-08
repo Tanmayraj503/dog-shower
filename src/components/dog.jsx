@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function RandomDogShower() {
+export default function Dog() {
   const [dogs, setDogs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [autoPlay, setAutoPlay] = useState(false);
@@ -50,7 +50,7 @@ export default function RandomDogShower() {
 
   const toggleAutoPlay = () => {
     if (!autoPlay && dogs.length === 0){
-      fetchDog();
+      fetchDog().then(() => setAutoPlay(true));;
     } else {
       setAutoPlay (!autoPlay);
     }
@@ -68,7 +68,7 @@ export default function RandomDogShower() {
 
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 p-8">
+    <div className="h-full pt-17 bg-linear-to-br from-blue-50 to-indigo-100">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-5xl font-bold text-indigo-900 mb-2">🐕 Random Dog Shower</h1>
@@ -138,7 +138,7 @@ export default function RandomDogShower() {
                 </div>
               ))}
             </div>
-            <div className="text-center mt-8 text-sm text-gray-500">
+            <div className="text-center mt-6 pb-1 text-sm text-gray-500">
               🐕 Showing {dogs.length} {dogs.length === 1 ? 'dog' : 'dogs'}
             </div>
           </>
