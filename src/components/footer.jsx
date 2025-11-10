@@ -14,13 +14,13 @@ export default function Footer(){
 
         {/* Middle social icons */}
         <div className="flex space-x-4">
-          <a href="https://instagram.com/tanmay" 
+          <a href="https://instagram.com/tanmay.raj53" 
           target="_blank"
            rel="noopener noreferrer"
           className="hover:text-purple-600 transition"> 
           <FontAwesomeIcon icon={faInstagram} />
           </a>
-          <a href="https://github.com/Tanmay" 
+          <a href="https://github.com/Tanmayraj503" 
           target="_blank"
            rel="noopener noreferrer"
           className="hover:text-purple-600 transition">
