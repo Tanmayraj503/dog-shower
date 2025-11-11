@@ -13,7 +13,7 @@ export default function Footer(){
         </p>
 
         {/* Middle social icons */}
-        <div className="flex space-x-4">
+        <div className="flex space-x-5">
           <a href="https://instagram.com/tanmay.raj53" 
           target="_blank"
            rel="noopener noreferrer"
