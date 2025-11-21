@@ -7,7 +7,7 @@ import Layout from './components/layout.jsx'
 import Home from './components/home.jsx'
 import Cat from './components/cat.jsx'
 import Dog from './components/dog.jsx'
-import CircularText from './components/CircularText';
+import Test from './components/test.jsx'
 
 
 const router = createBrowserRouter(
@@ -16,7 +16,7 @@ const router = createBrowserRouter(
       <Route path='' element={<Home />} />
       <Route path='dog' element={<Dog />} />
       <Route path='cat' element={<Cat />} />
-      <Route path='CircularText' element={<CircularText />} />
+      <Route path='test' element={<Test />} />
     </Route>
   )
 )

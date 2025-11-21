@@ -79,38 +79,32 @@ const CircularText = ({ text, spinDuration = 20, onHover = 'speedUp', className 
   };
 
   return (
-    <>
-      <motion.div
-        className={`m-0 mx-auto rounded-full w-[200px] h-[200px] relative text-white font-black text-center cursor-pointer origin-center ${className}`}
-        style={{ rotate: rotation }}
-        initial={{ rotate: 0 }}
-        animate={controls}
-        onMouseEnter={handleHoverStart}
-        onMouseLeave={handleHoverEnd}>
-        {letters.map((letter, i) => {
-          const rotationDeg = (360 / letters.length) * i;
-          const factor = Math.PI / letters.length;
-          const x = factor * i;
-          const y = factor * i;
-          const transform = `rotateZ(${rotationDeg}deg) translate3d(${x}px, ${y}px, 0)`;
+    <motion.div
+      className={`m-0 mx-auto rounded-full tracking-wide w-[200px] h-[200px] relative text-[#081f29] font-black text-center cursor-pointer origin-center ${className}`}
+      style={{ rotate: rotation }}
+      initial={{ rotate: 0 }}
+      animate={controls}
+      onMouseEnter={handleHoverStart}
+      onMouseLeave={handleHoverEnd}
+    >
+      {letters.map((letter, i) => {
+        const rotationDeg = (360 / letters.length) * i;
+        const factor = Math.PI / letters.length;
+        const x = factor * i;
+        const y = factor * i;
+        const transform = `rotateZ(${rotationDeg}deg) translate3d(${x}px, ${y}px, 0)`;
 
-          return (
-            <span
-              key={i}
-              className="absolute inline-block inset-0 text-2xl transition-all duration-500 ease-[cubic-bezier(0,0,0,1)]"
-              style={{ transform, WebkitTransform: transform }}>
-              {letter}
-            </span>
-          );
-        })}
-      </motion.div>
-      <CircularText
-        text="REACT*BITS*COMPONENTS*"
-        onHover="speedUp"
-        spinDuration={20}
-        className="custom-class"
-      />
-    </>
+        return (
+          <span
+            key={i}
+            className="absolute inline-block inset-0 text-2xl transition-all duration-500 ease-[cubic-bezier(0,0,0,1)]"
+            style={{ transform, WebkitTransform: transform }}
+          >
+            {letter}
+          </span>
+        );
+      })}
+    </motion.div>
   );
 };
 
