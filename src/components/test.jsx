@@ -1,6 +1,7 @@
 import CircularText from "./CircularText.jsx";
 import FloatingLines from "../background/testbackground.jsx";
 import TextPressure from './TextPressure.jsx';
+import TextType from './TextType.jsx';
 
 function Test() {
     return (
@@ -20,7 +21,7 @@ function Test() {
             </div>
 
             {/* Text pressure on top */}
-            <div style={{position: 'absolute',width: '400px', bottom: '50px', right: 0, zIndex: 10, pointerEvents: 'none'}}>
+            <div style={{ position: 'absolute', width: '400px', bottom: '50px', right: 0, zIndex: 10, pointerEvents: 'none' }}>
                 <div style={{ pointerEvents: "auto" }}>
                     <TextPressure
                         text="Hello!"
@@ -33,6 +34,18 @@ function Test() {
                         textColor="black"
                         strokeColor="#ff0000"
                         minFontSize={30}
+                    />
+                </div>
+            </div>
+
+            <div style={{ position: "absolute", zIndex: 10, pointerEvents: "none", fontSize: "34px", top: "25%", left: "13%"}}>
+                <div className="text-orange-400 pointer-events-none">
+                    <TextType
+                        text={["I am a frontend developer.", "मैं एक फ्रंटएंड डेवलपर हूँ।", "अहं फ्रण्टेण्ड्-डेवलपर् अस्मि।", "Я фронтенд-разработчик.", "私はフロントエンド開発者です。", " Je suis développeur frontend."]}
+                        typingSpeed={75}
+                        pauseDuration={1500}
+                        showCursor={true}
+                        cursorCharacter="|"
                     />
                 </div>
             </div>
