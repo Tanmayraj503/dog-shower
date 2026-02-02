@@ -31,14 +31,14 @@ export default function Header() {
                                 Cat Shower
                             </NavLink>
                         </li>
-                        <li>
+                        {/* <li>
                             <NavLink
                             to="/test"
                             className={({isActive})=>`block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-red-600" : "text-gray-700"} hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`}
                             >
                                 Reactbit test 
                             </NavLink>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
             </nav>

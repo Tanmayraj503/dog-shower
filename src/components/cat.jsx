@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import Footer from './footer';
 
 export default function Cat() {
   const [cats, setCats] = useState([]);
@@ -68,105 +69,92 @@ export default function Cat() {
   }, [autoPlay]);
 
   return (
-    <div className="bg-gradient-to-br from-pink-50 to-purple-100 pt-24 sm:pt-17">
-      <div className="max-w-6xl lg:mx-auto mx-4">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-purple-900 mb-2">😺 Random Cat Shower</h1>
-          <p className="text-gray-600">Click or auto-shower yourself with adorable cats!</p>
-        </div>
+    <>
+      <div className="bg-linear-to-br min-h-screen from-pink-50 to-purple-100 pt-24 sm:pt-17">
+        <div className="max-w-6xl lg:mx-auto mx-4">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-purple-900 mb-2">😺 Random Cat Shower</h1>
+            <p className="text-gray-600">Click or auto-shower yourself with adorable cats!</p>
+          </div>
 
-        {/* Buttons */}
-        <div className="flex flex-wrap justify-center gap-4 mb-8">
-          <button
-            onClick={handleGetCat}
-            disabled={loading || autoPlay}
-            className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all transform hover:scale-105 disabled:hover:scale-100 disabled:cursor-not-allowed"
-          >
-            {loading ? '⏳ Loading...' : '🎲 Get Random Cat'}
-          </button>
-
-          <button
-            onClick={toggleAutoPlay}
-            disabled={error !== null}
-            className={`${autoPlay
-              ? 'bg-red-600 hover:bg-red-700'
-              : 'bg-green-600 hover:bg-green-700'
-              } disabled:bg-gray-400 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all transform hover:scale-105 disabled:hover:scale-100`}
-          >
-            {autoPlay ? '⏸️ Stop Shower' : '▶️ Start Shower'}
-          </button>
-
-          {cats.length > 0 && (
+          {/* Buttons */}
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
             <button
-              onClick={clearCats}
-              className="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all transform hover:scale-105"
+              onClick={handleGetCat}
+              disabled={loading || autoPlay}
+              className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all transform hover:scale-105 disabled:hover:scale-100 disabled:cursor-not-allowed"
             >
-              🗑️ Clear All
+              {loading ? '⏳ Loading...' : '🎲 Get Random Cat'}
             </button>
+
+            <button
+              onClick={toggleAutoPlay}
+              disabled={error !== null}
+              className={`${autoPlay
+                ? 'bg-red-600 hover:bg-red-700'
+                : 'bg-green-600 hover:bg-green-700'
+                } disabled:bg-gray-400 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all transform hover:scale-105 disabled:hover:scale-100`}
+            >
+              {autoPlay ? '⏸️ Stop Shower' : '▶️ Start Shower'}
+            </button>
+
+            {cats.length > 0 && (
+              <button
+                onClick={clearCats}
+                className="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all transform hover:scale-105"
+              >
+                🗑️ Clear All
+              </button>
+            )}
+          </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+              <p className="font-bold">⚠️ Unable to Fetch Cats</p>
+              <p className="text-sm mt-2">{error}</p>
+            </div>
           )}
+
+          {/* Image Grid */}
+          {cats.length === 0 && !error ? (
+            <div className="text-center py-16">
+              <div className="text-8xl mb-4 animate-bounce">😺</div>
+              <p className="text-gray-500 text-xl mb-2">No cats yet! Click the button to start the shower 🚿</p>
+              <p className="text-gray-400 text-sm mt-4">API: https://api.thecatapi.com/v1/images/search</p>
+            </div>
+          ) : cats.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {cats.map((cat) => (
+                  <div
+                    key={cat.id}
+                    className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all hover:scale-105 hover:shadow-2xl animate-fade-in"
+                  >
+                    <img
+                      src={cat.url}
+                      alt="Random cat"
+                      className="w-full h-64 object-cover"
+                      loading="lazy"
+                      onError={(e) => {
+                        console.error('Image failed to load:', cat.url);
+                        e.target.parentElement.innerHTML =
+                          '<div class="w-full h-64 flex items-center justify-center bg-gray-200 text-6xl">😿</div>';
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="text-center mt-6 pb-1 text-sm text-gray-500">
+                😺 Showing {cats.length} {cats.length === 1 ? 'cat' : 'cats'}
+              </div>
+            </>
+          ) : null}
         </div>
-
-        {/* Error Message */}
-        {error && (
-          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
-            <p className="font-bold">⚠️ Unable to Fetch Cats</p>
-            <p className="text-sm mt-2">{error}</p>
-          </div>
-        )}
-
-        {/* Image Grid */}
-        {cats.length === 0 && !error ? (
-          <div className="text-center py-16">
-            <div className="text-8xl mb-4 animate-bounce">😺</div>
-            <p className="text-gray-500 text-xl mb-2">No cats yet! Click the button to start the shower 🚿</p>
-            <p className="text-gray-400 text-sm mt-4">API: https://api.thecatapi.com/v1/images/search</p>
-          </div>
-        ) : cats.length > 0 ? (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {cats.map((cat) => (
-                <div
-                  key={cat.id}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all hover:scale-105 hover:shadow-2xl animate-fade-in"
-                >
-                  <img
-                    src={cat.url}
-                    alt="Random cat"
-                    className="w-full h-64 object-cover"
-                    loading="lazy"
-                    onError={(e) => {
-                      console.error('Image failed to load:', cat.url);
-                      e.target.parentElement.innerHTML =
-                        '<div class="w-full h-64 flex items-center justify-center bg-gray-200 text-6xl">😿</div>';
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="text-center mt-6 pb-1 text-sm text-gray-500">
-              😺 Showing {cats.length} {cats.length === 1 ? 'cat' : 'cats'}
-            </div>
-          </>
-        ) : null}
       </div>
+      <Footer />
+    </>
 
-      {/* CSS Animations */}
-      <style>{`
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(-20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.5s ease-out;
-        }
-        @keyframes bounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        .animate-bounce {
-          animation: bounce 2s ease-in-out infinite;
-        }
-      `}</style>
-    </div>
+
   );
 }

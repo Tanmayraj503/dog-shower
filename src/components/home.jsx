@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
+import Footer from "./footer";
 
 export default function Home() {
   return (
-    <div className=" pt-20 bg-linear-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-6">
+    <>
+    <div className="min-h-screen pt-20 bg-linear-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-6">
       <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-indigo-900 mb-7 text-center">
         🐾 Welcome to the Animal Shower 🐾
       </h1>
@@ -41,5 +43,7 @@ export default function Home() {
         </Link>
       </div>
     </div>
+    <Footer />
+    </>
   );
 }
